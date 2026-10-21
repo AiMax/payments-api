@@ -1,4 +1,6 @@
 package com.example.payments_api.dto;
 
-public record AccountResponse(String id, String ownerName, String currency) {
+import jakarta.validation.constraints.Pattern;
+
+public record AccountResponse(String id, String ownerName, @Pattern(regexp = "[A-Z]{3}", message = "must be a 3-letter ISO code") String currency) {
 }

@@ -2,6 +2,7 @@ package com.example.payments_api.service;
 
 import com.example.payments_api.dto.AccountResponse;
 import com.example.payments_api.dto.CreateAccountRequest;
+import com.example.payments_api.exceptionHandlers.DuplicateAccountException;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -20,6 +21,9 @@ public class AccountService {
 
     public AccountResponse create(CreateAccountRequest req){
         var account = new AccountResponse(UUID.randomUUID().toString(), req.ownerName(), req.currency());
+        if (accounts.values().stream().anyMatch(key -> key.ownerName().equalsIgnoreCase(req.ownerName()))){
+            throw new DuplicateAccountException(req.ownerName());
+        }
         accounts.put(account.id(), account);
         return account;
     }
